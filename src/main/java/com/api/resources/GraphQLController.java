@@ -39,7 +39,6 @@ public class GraphQLController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("graph")
     public void graphql(Map<String, Object> body, @Suspended AsyncResponse asyncResponse) {
-
         String query = (String) body.get("query");
         if (query == null) {
             query = "";

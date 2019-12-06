@@ -10,6 +10,7 @@ import org.dataloader.BatchLoader;
 import org.dataloader.DataLoader;
 import org.dataloader.DataLoaderRegistry;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -18,14 +19,13 @@ public class StudentWiring {
 
     private DataLoaderRegistry dataLoaderRegistry;
 
+    @Inject
     public StudentWiring(DataLoaderRegistry dataLoaderRegistry) {
         this.dataLoaderRegistry = dataLoaderRegistry;
         System.out.println("AICI");
         dataLoaderRegistry.register("students12", newStudentDataLoader());
     }
 
-    public StudentWiring() {
-    }
 
     private List<Object> getStudentDataViaBatchHTTPApi(List<String> keys) {
         return keys.stream().map(StudentData::getStudentData).collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class StudentWiring {
         return new DataLoader<>(studentBatchLoader);
     }
 
-    public DataFetcher schoolDataFetcher = environment -> {
+    public DataFetcher studentDataFetcher = environment -> {
         String id = environment.getArgument("id");
         Context context = environment.getContext();
         System.out.println(context.getStudentDataLoader());
