@@ -1,0 +1,13 @@
+
+type Query {
+    student(
+        id: String
+    ):Student
+}
+
+type Student {
+    id: ID!
+    firstName: String,
+    lastName: String
+}
+
