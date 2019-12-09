@@ -22,10 +22,8 @@ public class StudentWiring {
     @Inject
     public StudentWiring(DataLoaderRegistry dataLoaderRegistry) {
         this.dataLoaderRegistry = dataLoaderRegistry;
-        System.out.println("AICI");
-        dataLoaderRegistry.register("students12", newStudentDataLoader());
+        dataLoaderRegistry.register("students", newStudentDataLoader());
     }
-
 
     private List<Object> getStudentDataViaBatchHTTPApi(List<String> keys) {
         return keys.stream().map(StudentData::getStudentData).collect(Collectors.toList());
@@ -39,14 +37,13 @@ public class StudentWiring {
         return new DataLoader<>(studentBatchLoader);
     }
 
-    public DataFetcher studentDataFetcher = environment -> {
+    DataFetcher studentDataFetcher = environment -> {
         String id = environment.getArgument("id");
         Context context = environment.getContext();
-        System.out.println(context.getStudentDataLoader());
         return context.getStudentDataLoader().load(id);
     };
 
-    public TypeResolver studentTypeResolver = environment -> {
+    TypeResolver studentTypeResolver = environment -> {
         return (GraphQLObjectType) environment.getSchema().getType("Student");
     };
 

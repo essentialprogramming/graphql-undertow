@@ -28,7 +28,7 @@ public class GraphQLController {
     private ExecutorsProvider executorsProvider;
 
 	@Inject
-    GraphQL graphQL;
+    private GraphQL graphQL;
 
 	@Inject
     private ObjectMapper objectMapper;

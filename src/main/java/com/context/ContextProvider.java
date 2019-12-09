@@ -7,7 +7,7 @@ import javax.inject.Inject;
 public class ContextProvider {
 
     @Inject
-    DataLoaderRegistry dataLoaderRegistry;
+    private DataLoaderRegistry dataLoaderRegistry;
 
     public ContextProvider() {
     }

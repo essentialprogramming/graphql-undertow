@@ -5,19 +5,19 @@ import java.util.Map;
 
 public class StudentData {
 
-    static Student student1 = new Student(
+    private static Student student1 = new Student(
             "1",
             "Ion",
             "Pop"
     );
 
-    static Student student2 = new Student(
+    private static Student student2 = new Student(
             "2",
             "Maria",
             "Popescu"
     );
 
-    static Map<String, Student> students = new LinkedHashMap<>();
+    private static Map<String, Student> students = new LinkedHashMap<>();
 
     static {
         students.put("1", student1);
