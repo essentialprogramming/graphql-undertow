@@ -1,0 +1,20 @@
+type Query {
+    article(id: String
+    ):Article
+}
+
+type Article {
+    id: ID!
+    title: String
+    tags: [String]
+    paragraph: String
+    author(id: String): Author
+}
+
+type Author {
+    id: ID!
+    firstName: String
+    lastName: String
+    articles: [String]
+    contactLinks: [String]
+}

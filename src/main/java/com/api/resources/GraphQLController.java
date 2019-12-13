@@ -44,6 +44,7 @@ public class GraphQLController {
             query = "";
         }
 
+        String operationName = (String) body.get("operationName");
         Map<String, Object> variables = (Map<String, Object>) body.get("variables");
         if (variables == null) {
             variables = new LinkedHashMap<>();
@@ -53,7 +54,7 @@ public class GraphQLController {
         String finalQuery = query;
         Map<String, Object> finalVariables = variables;
 
-        Computation.computeAsync(() -> executeGraphqlQuery(finalQuery, finalVariables), executorService)
+        Computation.computeAsync(() -> executeGraphqlQuery(finalQuery, operationName, finalVariables), executorService)
                 .thenApplyAsync(asyncResponse::resume, executorService)
                 .exceptionally(error -> asyncResponse.resume(handleException(error)));
     }
@@ -62,13 +63,14 @@ public class GraphQLController {
         return Response.serverError().entity(ex).build();
     }
 
-    private Map<String, Object> executeGraphqlQuery(String query, Map<String, Object> variables) throws IOException {
+    private Map<String, Object> executeGraphqlQuery(String query,String operationName, Map<String, Object> variables) throws IOException {
 
         Context context = contextProvider.newContext();
 
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query(query)
                 .variables(variables)
+                .operationName(operationName)
                 .context(context)
                 .build();
 

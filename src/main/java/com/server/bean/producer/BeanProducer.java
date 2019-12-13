@@ -1,7 +1,7 @@
 package com.server.bean.producer;
 
 
-import com.api.resources.StudentWiring;
+import com.api.resources.ArticleWiring;
 import com.context.ContextProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dataloader.DataLoaderRegistry;
@@ -20,11 +20,6 @@ public class BeanProducer {
     }
 
     @Produces
-    public StudentWiring produceWiring(DataLoaderRegistry dataLoaderRegistry) {
-        return new StudentWiring(dataLoaderRegistry);
-    }
-
-    @Produces
     @ApplicationScoped
     public ContextProvider produceContextProvider(DataLoaderRegistry dataLoaderRegistry) {
         return new ContextProvider(dataLoaderRegistry);
@@ -33,6 +28,11 @@ public class BeanProducer {
     @Produces
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
+    }
+
+    @Produces
+    public ArticleWiring produceArticleWiring(DataLoaderRegistry dataLoaderRegistry){
+        return new ArticleWiring(dataLoaderRegistry);
     }
 
 }

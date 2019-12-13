@@ -11,7 +11,7 @@ public class Context {
         this.dataLoaderRegistry = dataLoaderRegistry;
     }
 
-    public DataLoader<String, Object> getStudentDataLoader() {
-        return dataLoaderRegistry.getDataLoader("students");
+    public DataLoader<String, Object> getArticleDataLoader() {
+        return dataLoaderRegistry.getDataLoader("articles");
     }
 }

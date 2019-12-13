@@ -12,6 +12,7 @@ import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 import org.dataloader.DataLoaderRegistry;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
+
 import static graphql.execution.instrumentation.dataloader.DataLoaderDispatcherInstrumentationOptions.newOptions;
 import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
 import static java.util.Arrays.asList;
@@ -29,7 +31,7 @@ public class GraphQLProvider {
     @Inject
     private DataLoaderRegistry dataLoaderRegistry;
     @Inject
-    private StudentWiring studentWiring;
+    private ArticleWiring articleWiring;
 
     private GraphQLSchema buildSchema(String sdl) {
         TypeDefinitionRegistry typeRegistry = new SchemaParser().parse(sdl);
@@ -41,18 +43,20 @@ public class GraphQLProvider {
     private RuntimeWiring buildWiring() {
         return RuntimeWiring.newRuntimeWiring()
                 .type(newTypeWiring("Query")
-                        .dataFetcher("student", studentWiring.studentDataFetcher)
-                )
-                .type(newTypeWiring("Student")
-                        .typeResolver(studentWiring.studentTypeResolver)
-                )
+                        .dataFetcher("article", articleWiring.articleDataFetcher))
+                .type(newTypeWiring("Article")
+                        .typeResolver(articleWiring.articleTypeResolver))
+                .type(newTypeWiring("author")
+                        .dataFetcher("author", articleWiring.authorDataFetcher))
+                .type(newTypeWiring("Author")
+                        .typeResolver(articleWiring.authorTypeResolver))
                 .build();
     }
 
     @Produces
     public GraphQL graphQL() throws IOException {
 
-        FileInputResource fileInputResource = new FileInputResource("classpath:student.graphql");
+        FileInputResource fileInputResource = new FileInputResource("classpath:article.graphql");
         InputStream stream = fileInputResource.getInputStream();
         String text = null;
 
