@@ -1,14 +1,20 @@
 type Query {
-    article(id: String
-    ):Article
+    article(id: String):Article
+    getByTitle(title: String): Article
 }
 
 type Article {
     id: ID!
-    title: String
+    title: String!
     tags: [String]
-    paragraph: String
-    author(id: String): Author
+    content: String
+    author: Author
+    creationDate: String
+    lastModified: String
+    readingTime: Int
+    image: String
+    comment: [Comment]
+
 }
 
 type Author {
@@ -17,4 +23,10 @@ type Author {
     lastName: String
     articles: [String]
     contactLinks: [String]
+}
+
+type Comment {
+    id: ID!
+    text: String
+    commentAuthor: String
 }

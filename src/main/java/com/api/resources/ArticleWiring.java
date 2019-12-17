@@ -1,8 +1,8 @@
 package com.api.resources;
 
 import com.context.Context;
+import com.model.Article;
 import com.model.ArticleData;
-import com.model.Author;
 import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.TypeResolver;
@@ -12,7 +12,9 @@ import org.dataloader.DataLoaderRegistry;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ArticleWiring {
 
@@ -47,6 +49,12 @@ public class ArticleWiring {
         return context.getArticleDataLoader().load(id);
     };
 
+    DataFetcher commentDataFetcher = environment -> {
+        String id = environment.getArgument("id");
+        Context context = environment.getContext();
+        return context.getArticleDataLoader().load(id);
+    };
+
     TypeResolver articleTypeResolver = environment -> {
         return (GraphQLObjectType) environment.getSchema().getType("Article");
     };
@@ -54,4 +62,10 @@ public class ArticleWiring {
     TypeResolver authorTypeResolver = environment -> {
         return (GraphQLObjectType) environment.getSchema().getType("Author");
     };
+
+    TypeResolver commentTypeResolver = environment -> {
+        return (GraphQLObjectType) environment.getSchema().getType("Comment");
+    };
+
+
 }

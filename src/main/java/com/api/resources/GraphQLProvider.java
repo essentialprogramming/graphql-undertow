@@ -50,6 +50,10 @@ public class GraphQLProvider {
                         .dataFetcher("author", articleWiring.authorDataFetcher))
                 .type(newTypeWiring("Author")
                         .typeResolver(articleWiring.authorTypeResolver))
+                .type(newTypeWiring("comment")
+                        .dataFetcher("comment", articleWiring.commentDataFetcher))
+                .type(newTypeWiring("Comment")
+                        .typeResolver(articleWiring.commentTypeResolver))
                 .build();
     }
 
