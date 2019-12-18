@@ -2,9 +2,6 @@ package com.api.resources;
 
 import com.async.support.Computation;
 import com.async.support.ExecutorsProvider;
-import com.context.Context;
-import com.context.ContextProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -29,11 +26,6 @@ public class GraphQLController {
 
 	@Inject
     private GraphQL graphQL;
-
-	@Inject
-    private ObjectMapper objectMapper;
-	@Inject
-    private ContextProvider contextProvider;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,13 +57,13 @@ public class GraphQLController {
 
     private Map<String, Object> executeGraphqlQuery(String query,String operationName, Map<String, Object> variables) throws IOException {
 
-        Context context = contextProvider.newContext();
+        //Context context = contextProvider.newContext();
 
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .query(query)
                 .variables(variables)
                 .operationName(operationName)
-                .context(context)
+          //      .context(context)
                 .build();
 
         ExecutionResult executionResult = graphQL.execute(executionInput);
