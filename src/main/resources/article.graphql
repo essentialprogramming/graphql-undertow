@@ -1,6 +1,23 @@
+schema {
+    query: Query
+}
+
 type Query {
-    article(id: String):Article
-    getByTitle(title: String): Article
+    allByTitle(filter: SearchCriteria, title: String): [Article]
+    allByTag(filter: SearchCriteria): [Article]
+    allByAuthor(filter: SearchCriteria): [Article]
+    allByDate(filter: SearchCriteria, compareValue: String): [Article]
+    allArticles: [Article]
+    articleById(filter: SearchCriteria): Article
+}
+
+input SearchCriteria {
+    title_contains: String
+    tags_contains: [String]
+    first_name: String
+    last_name: String
+    date: String
+    article_id: String
 }
 
 type Article {

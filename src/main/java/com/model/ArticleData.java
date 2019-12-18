@@ -2,6 +2,7 @@ package com.model;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import static java.util.Arrays.asList;
@@ -79,14 +80,14 @@ public class ArticleData {
                     "A map is a key-value mapping, which means that every key is mapped to exactly " +
                     "one value and that we can use the key to retrieve the corresponding value from a map.",
             author2,
-            LocalDate.parse("2019-01-12"),
+            LocalDate.parse("2019-05-22"),
             LocalDate.parse("2019-11-18"),
             4,
             "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg",
             asList(comment3)
     );
 
-    private static Map<String, Article> articles = new LinkedHashMap<>();
+    public static Map<String, Article> articles = new LinkedHashMap<>();
 
     static {
         articles.put("1", article1);

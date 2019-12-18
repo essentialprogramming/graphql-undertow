@@ -25,7 +25,7 @@ import static graphql.execution.instrumentation.dataloader.DataLoaderDispatcherI
 import static graphql.schema.idl.TypeRuntimeWiring.newTypeWiring;
 import static java.util.Arrays.asList;
 
-@ApplicationScoped
+//@ApplicationScoped
 public class GraphQLProvider {
 
     @Inject
