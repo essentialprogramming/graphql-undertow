@@ -16,41 +16,29 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class ArticleRepository {
 
-    public List<Article> getAllByTitle(SearchCriteria filter, String articleTitle) {
-        String filterContains = buildFilter(filter, articleTitle);
-
-        List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
-        List<Article> foundArticles = new ArrayList<>();
-
-        for (Article article : allArticles) {
-            assert filterContains != null;
-            if (article.getTitle().contains(filterContains)) {
-                foundArticles.add(article);
-            }
-        }
-        return foundArticles;
-    }
-
-    private String buildFilter(SearchCriteria filter, String articleTitle) {
+    public List<Article> getAllArticlesByTitle(SearchCriteria filter) {
         String titlePattern = filter.getTitleContains();
 
         String descriptionCondition = null;
+        List<Article> foundArticles = new ArrayList<>();
 
         if (titlePattern != null && !titlePattern.isEmpty()) {
             descriptionCondition = "\\b" + titlePattern + "\\b";
 
             Pattern pattern = Pattern.compile(descriptionCondition, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(articleTitle);
-            if (matcher.find()) {
-                System.out.print("Start index: " + matcher.start());
-                System.out.print(" End index: " + matcher.end() + " ");
-                System.out.println(matcher.group());
+            List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
 
-                return matcher.group();
+            for (Article article : allArticles) {
+                Matcher matcher = pattern.matcher(article.getTitle());
+                if (matcher.find()) {
+                    System.out.print("Start index: " + matcher.start());
+                    System.out.print(" End index: " + matcher.end() + " ");
+                    System.out.println(matcher.group());
+                    foundArticles.add(article);
+                }
             }
-
         }
-        return null;
+        return foundArticles;
     }
 
 

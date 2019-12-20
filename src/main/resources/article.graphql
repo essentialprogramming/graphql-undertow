@@ -4,12 +4,12 @@ schema {
 }
 
 type Query {
-    allByTitle(filter: SearchCriteria, title: String): [Article]
     allByTag(filter: SearchCriteria): [Article]
     allByAuthor(filter: SearchCriteria): [Article]
     allByDate(filter: SearchCriteria, compareValue: String): [Article]
     allArticles: [Article]
     articleById(filter: SearchCriteria): Article
+    allArticlesByTitle(filter: SearchCriteria): [Article]
 }
 
 type Mutation {

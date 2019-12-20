@@ -17,8 +17,8 @@ public class Query implements GraphQLRootResolver {
         this.articleRepository = articleRepository;
     }
 
-    public List<Article> allByTitle(SearchCriteria filter, String articleTitle) {
-        return articleRepository.getAllByTitle(filter, articleTitle);
+    public List<Article> allArticlesByTitle(SearchCriteria filter) {
+        return articleRepository.getAllArticlesByTitle(filter);
     }
 
     public List<Article> allByTag(SearchCriteria filter) {
