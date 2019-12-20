@@ -1,7 +1,6 @@
 package com.api.resources;
 
 import com.coxautodev.graphql.tools.SchemaParser;
-import com.model.Query;
 import com.repository.ArticleRepository;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -17,7 +16,8 @@ public class GraphInit {
         return SchemaParser.newParser()
                 .file("article.graphql")
                 .resolvers(
-                        new Query(articleRepository))
+                        new Query(articleRepository),
+                        new Mutation(articleRepository))
                 .build()
                 .makeExecutableSchema();
     }

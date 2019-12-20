@@ -9,13 +9,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Article {
+public class ArticleDTO {
 
     private String id;
     private String title;
     private List<String> tags;
     private String content;
-    private Author author;
+    private AuthorDTO author;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -24,22 +24,6 @@ public class Article {
     private int readingTime;
     private String image;
     private List<Comment> comment;
-
-    public Article(String id, String title, List<String> tags, String content, Author author, LocalDate creationDate, LocalDate lastModified, int readingTime, String image, List<Comment> comment) {
-        this.id = id;
-        this.title = title;
-        this.tags = tags;
-        this.content = content;
-        this.author = author;
-        this.creationDate = creationDate;
-        this.lastModified = lastModified;
-        this.readingTime = readingTime;
-        this.image = image;
-        this.comment = comment;
-    }
-
-    public Article() {
-    }
 
     public String getId() {
         return id;
@@ -73,11 +57,11 @@ public class Article {
         this.content = content;
     }
 
-    public Author getAuthor() {
+    public AuthorDTO getAuthor() {
         return author;
     }
 
-    public void setAuthor(Author author) {
+    public void setAuthor(AuthorDTO author) {
         this.author = author;
     }
 
@@ -87,14 +71,6 @@ public class Article {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public LocalDate getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(LocalDate lastModified) {
-        this.lastModified = lastModified;
     }
 
     public int getReadingTime() {
@@ -113,27 +89,19 @@ public class Article {
         this.image = image;
     }
 
+    public LocalDate getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(LocalDate lastModified) {
+        this.lastModified = lastModified;
+    }
+
     public List<Comment> getComment() {
         return comment;
     }
 
     public void setComment(List<Comment> comment) {
         this.comment = comment;
-    }
-
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id='" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", tags=" + tags +
-                ", content='" + content + '\'' +
-                ", author=" + author +
-                ", creationDate=" + creationDate +
-                ", lastModified=" + lastModified +
-                ", readingTime=" + readingTime +
-                ", image='" + image + '\'' +
-                ", comment=" + comment +
-                '}';
     }
 }

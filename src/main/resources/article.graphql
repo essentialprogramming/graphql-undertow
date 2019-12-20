@@ -1,5 +1,6 @@
 schema {
     query: Query
+    mutation: Mutation
 }
 
 type Query {
@@ -11,6 +12,10 @@ type Query {
     articleById(filter: SearchCriteria): Article
 }
 
+type Mutation {
+    createArticle(article: ArticleDTO, author: String): Article!
+}
+
 input SearchCriteria {
     title_contains: String
     tags_contains: [String]
@@ -18,6 +23,25 @@ input SearchCriteria {
     last_name: String
     date: String
     article_id: String
+}
+
+input ArticleDTO {
+    id: ID
+    title: String
+    tags: [String]
+    content: String
+    author: AuthorDTO
+    creationDate: String
+    readingTime: Int
+    image: String
+}
+
+input AuthorDTO {
+    id: ID!
+    firstName: String
+    lastName: String
+    articles: [String]
+    contactLinks: [String]
 }
 
 type Article {

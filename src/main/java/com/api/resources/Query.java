@@ -1,7 +1,9 @@
-package com.model;
+package com.api.resources;
 
 
 import com.coxautodev.graphql.tools.GraphQLRootResolver;
+import com.model.Article;
+import com.model.SearchCriteria;
 import com.repository.ArticleRepository;
 
 import java.util.List;
