@@ -112,9 +112,12 @@ public class ArticleRepository {
         return null;
     }
 
-    public Article saveArticle(ArticleDTO article, String firstName) {
+    public Article saveArticle(ArticleDTO article, String firstName) throws IOException {
         ArticleDTO newArticle = new ArticleDTO();
         Random random = new Random();
+        BufferedWriter writer = null;
+        FileWriter fileWriter;
+        String file = "C:\\Work\\graphql_undertow\\src\\main\\resources\\articles.txt";
 
         newArticle.setId(String.valueOf(random.nextInt(Integer.MAX_VALUE)));
         newArticle.setTitle(article.getTitle());
@@ -125,16 +128,24 @@ public class ArticleRepository {
         newArticle.setReadingTime(article.getReadingTime());
         newArticle.setImage(article.getImage());
 
-        try (PrintWriter fileWriter = new PrintWriter("C:\\Work\\graphql_undertow\\src\\main\\resources\\articles.txt", "UTF-8")) {
-            fileWriter.write(Mapper.articleDTOToArticle(newArticle).toString());
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
+        try {
+            fileWriter = new FileWriter(file, true);
+            writer = new BufferedWriter(fileWriter);
 
+            writer.write(Mapper.articleDTOToArticle(newArticle).toString());
+            writer.newLine();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
         return Mapper.articleDTOToArticle(newArticle);
     }
 
-    public Author getByFirstName(String firstName) {
+    private Author getByFirstName(String firstName) {
         List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
 
         for (Article article : allArticles) {
