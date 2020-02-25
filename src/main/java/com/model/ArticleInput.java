@@ -9,13 +9,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDate;
 import java.util.List;
 
-public class ArticleDTO {
+public class ArticleInput {
 
     private String id;
     private String title;
     private List<String> tags;
     private String content;
-    private AuthorDTO author;
+    private AuthorInput author;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
@@ -57,11 +57,11 @@ public class ArticleDTO {
         this.content = content;
     }
 
-    public AuthorDTO getAuthor() {
+    public AuthorInput getAuthor() {
         return author;
     }
 
-    public void setAuthor(AuthorDTO author) {
+    public void setAuthor(AuthorInput author) {
         this.author = author;
     }
 

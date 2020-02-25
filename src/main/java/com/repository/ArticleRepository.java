@@ -108,8 +108,8 @@ public class ArticleRepository {
         return null;
     }
 
-    public Article saveArticle(ArticleDTO article, String firstName) throws IOException {
-        ArticleDTO newArticle = new ArticleDTO();
+    public Article saveArticle(ArticleInput article, String firstName) throws IOException {
+        ArticleInput newArticle = new ArticleInput();
         Random random = new Random();
         BufferedWriter writer = null;
         FileWriter fileWriter;

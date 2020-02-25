@@ -2,7 +2,7 @@ package com.model;
 
 import java.util.List;
 
-public class AuthorDTO {
+public class AuthorInput {
 
     private String id;
     private String firstName;

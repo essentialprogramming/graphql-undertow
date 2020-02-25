@@ -1,51 +1,51 @@
 package com.mapper;
 
 import com.model.Article;
-import com.model.ArticleDTO;
+import com.model.ArticleInput;
 import com.model.Author;
-import com.model.AuthorDTO;
+import com.model.AuthorInput;
 
 public class Mapper {
 
-    public static Article articleDTOToArticle(ArticleDTO articleDTO) {
+    public static Article articleDTOToArticle(ArticleInput articleInput) {
         Article article = new Article();
 
-        article.setId(articleDTO.getId());
-        article.setTitle(articleDTO.getTitle());
-        article.setTags(articleDTO.getTags());
-        article.setContent(articleDTO.getContent());
-        article.setAuthor(authorDTOToAuthor(articleDTO.getAuthor()));
-        article.setCreationDate(articleDTO.getCreationDate());
-        article.setLastModified(articleDTO.getLastModified());
-        article.setReadingTime(articleDTO.getReadingTime());
-        article.setImage(articleDTO.getImage());
-        article.setComment(articleDTO.getComment());
+        article.setId(articleInput.getId());
+        article.setTitle(articleInput.getTitle());
+        article.setTags(articleInput.getTags());
+        article.setContent(articleInput.getContent());
+        article.setAuthor(authorDTOToAuthor(articleInput.getAuthor()));
+        article.setCreationDate(articleInput.getCreationDate());
+        article.setLastModified(articleInput.getLastModified());
+        article.setReadingTime(articleInput.getReadingTime());
+        article.setImage(articleInput.getImage());
+        article.setComment(articleInput.getComment());
 
         return article;
     }
 
-    private static Author authorDTOToAuthor(AuthorDTO authorDTO) {
+    private static Author authorDTOToAuthor(AuthorInput authorInput) {
         Author author = new Author();
 
-        author.setId(authorDTO.getId());
-        author.setArticles(authorDTO.getArticles());
-        author.setContactLinks(authorDTO.getContactLinks());
-        author.setFirstName(authorDTO.getFirstName());
-        author.setLastName(authorDTO.getLastName());
+        author.setId(authorInput.getId());
+        author.setArticles(authorInput.getArticles());
+        author.setContactLinks(authorInput.getContactLinks());
+        author.setFirstName(authorInput.getFirstName());
+        author.setLastName(authorInput.getLastName());
 
         return author;
     }
 
-    public static AuthorDTO authorToAuthorDTO(Author author) {
-        AuthorDTO authorDTO = new AuthorDTO();
+    public static AuthorInput authorToAuthorDTO(Author author) {
+        AuthorInput authorInput = new AuthorInput();
 
-        authorDTO.setId(author.getId());
-        authorDTO.setArticles(author.getArticles());
-        authorDTO.setContactLinks(author.getContactLinks());
-        authorDTO.setFirstName(author.getFirstName());
-        authorDTO.setLastName(author.getLastName());
+        authorInput.setId(author.getId());
+        authorInput.setArticles(author.getArticles());
+        authorInput.setContactLinks(author.getContactLinks());
+        authorInput.setFirstName(author.getFirstName());
+        authorInput.setLastName(author.getLastName());
 
-        return authorDTO;
+        return authorInput;
     }
 }
 

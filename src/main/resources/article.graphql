@@ -13,21 +13,21 @@ type Query {
 }
 
 type Mutation {
-    createArticle(article: ArticleDTO, author: String): Article!
+    createArticle(article: ArticleInput, author: String): Article!
 }
 
-input ArticleDTO {
+input ArticleInput {
     id: ID
     title: String
     tags: [String]
     content: String
-    author: AuthorDTO
+    author: AuthorInput
     creationDate: String
     readingTime: Int
     image: String
 }
 
-input AuthorDTO {
+input AuthorInput {
     id: ID!
     firstName: String
     lastName: String

@@ -1,18 +1,19 @@
 package com.api.resources;
 
 
-import com.coxautodev.graphql.tools.GraphQLRootResolver;
+import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.model.Article;
 import com.repository.ArticleRepository;
 
 import java.util.List;
 
 
-public class Query implements GraphQLRootResolver {
+public class Query implements GraphQLQueryResolver {
 
     private final ArticleRepository articleRepository;
 
     public Query(ArticleRepository articleRepository) {
+
         this.articleRepository = articleRepository;
     }
 
