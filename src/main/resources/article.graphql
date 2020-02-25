@@ -4,25 +4,16 @@ schema {
 }
 
 type Query {
-    allByTag(filter: SearchCriteria): [Article]
-    allByAuthor(filter: SearchCriteria): [Article]
-    allByDate(filter: SearchCriteria, compareValue: String): [Article]
+    allByTag(filter: [String]): [Article]
+    allByAuthor(firstName: String, lastName: String): [Article]
+    allByDate(date: String, compareValue: String): [Article]
     allArticles: [Article]
-    articleById(filter: SearchCriteria): Article
-    allArticlesByTitle(filter: SearchCriteria): [Article]
+    articleById(id: String): Article
+    allArticlesByTitle(filter: String): [Article]
 }
 
 type Mutation {
     createArticle(article: ArticleDTO, author: String): Article!
-}
-
-input SearchCriteria {
-    title_contains: String
-    tags_contains: [String]
-    first_name: String
-    last_name: String
-    date: String
-    article_id: String
 }
 
 input ArticleDTO {

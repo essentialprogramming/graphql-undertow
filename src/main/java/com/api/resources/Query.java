@@ -3,7 +3,6 @@ package com.api.resources;
 
 import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import com.model.Article;
-import com.model.SearchCriteria;
 import com.repository.ArticleRepository;
 
 import java.util.List;
@@ -17,27 +16,29 @@ public class Query implements GraphQLRootResolver {
         this.articleRepository = articleRepository;
     }
 
-    public List<Article> allArticlesByTitle(SearchCriteria filter) {
+    public List<Article> allArticlesByTitle(String filter) {
         return articleRepository.getAllArticlesByTitle(filter);
     }
 
-    public List<Article> allByTag(SearchCriteria filter) {
-        return articleRepository.getAllByTag(filter);
+    public List<Article> allByTag(List<String> tags) {
+
+        return articleRepository.getAllByTag(tags);
     }
 
-    public List<Article> allByAuthor(SearchCriteria filter) {
-        return articleRepository.getAllByAuthor(filter);
+    public List<Article> allByAuthor(String firstName, String lastName) {
+
+        return articleRepository.getAllByAuthor(firstName, lastName);
     }
 
-    public List<Article> allByDate(SearchCriteria filter, String compareValue) {
-        return articleRepository.getAllByDate(filter, compareValue);
+    public List<Article> allByDate(String date, String compareValue) {
+        return articleRepository.getAllByDate(date, compareValue);
     }
 
     public List<Article> allArticles() {
         return articleRepository.getAllArticles();
     }
 
-    public Article articleById(SearchCriteria filter) {
-        return articleRepository.getArticleById(filter);
+    public Article articleById(String id) {
+        return articleRepository.getArticleById(id);
     }
 }

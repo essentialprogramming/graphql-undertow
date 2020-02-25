@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class LocalDateDeserializer extends StdDeserializer<LocalDate> {
 
-    protected LocalDateDeserializer() {
+    public LocalDateDeserializer() {
         super(LocalDate.class);
     }
 

@@ -5,6 +5,8 @@ import com.model.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +18,13 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class ArticleRepository {
 
-    public List<Article> getAllArticlesByTitle(SearchCriteria filter) {
-        String titlePattern = filter.getTitleContains();
+    public List<Article> getAllArticlesByTitle(String filter) {
 
         String descriptionCondition = null;
         List<Article> foundArticles = new ArrayList<>();
 
-        if (titlePattern != null && !titlePattern.isEmpty()) {
-            descriptionCondition = "\\b" + titlePattern + "\\b";
+        if (filter != null && !filter.isEmpty()) {
+            descriptionCondition = "\\b" + filter + "\\b";
 
             Pattern pattern = Pattern.compile(descriptionCondition, Pattern.CASE_INSENSITIVE);
             List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
@@ -42,14 +43,13 @@ public class ArticleRepository {
     }
 
 
-    public List<Article> getAllByTag(SearchCriteria filter) {
+    public List<Article> getAllByTag(List<String> tags) {
 
-        List<String> searchPattern = filter.getTagsContains();
         String REGEX_FIND_WORD = "(?i).*?\\b%s\\b.*?";
         List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
         List<Article> foundArticles = new ArrayList<>();
 
-        for (String t : searchPattern) {
+        for (String t : tags) {
             String regex = String.format(REGEX_FIND_WORD, Pattern.quote(t));
 
             for (Article article : allArticles) {
@@ -63,32 +63,29 @@ public class ArticleRepository {
         return foundArticles;
     }
 
-    public List<Article> getAllByAuthor(SearchCriteria filter) {
+    public List<Article> getAllByAuthor(String firstName, String lastName) {
 
-        String firstNamePattern = filter.getAuthorFirstName();
-        String lastNamePattern = filter.getAuthorLastName();
         List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
         List<Article> foundArticles = new ArrayList<>();
 
         for (Article article : allArticles) {
-            if (article.getAuthor().getFirstName().equals(firstNamePattern) && article.getAuthor().getLastName().equals(lastNamePattern)) {
+            if (article.getAuthor().getFirstName().equals(firstName) && article.getAuthor().getLastName().equals(lastName)) {
                 foundArticles.add(article);
             }
         }
         return foundArticles;
     }
 
-    public List<Article> getAllByDate(SearchCriteria filter, String compareValue) {
+    public List<Article> getAllByDate(String date, String compareValue) {
 
-        LocalDate datePattern = filter.getDate();
         List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
         List<Article> foundArticles = new ArrayList<>();
 
         for (Article article : allArticles) {
-
-            if (compareValue.equals("before") && datePattern.isAfter(article.getCreationDate())) {
+            LocalDate localDate = LocalDate.parse(date);
+            if (compareValue.equals("before") && localDate.isAfter(article.getCreationDate())) {
                 foundArticles.add(article);
-            } else if (compareValue.equals("after") && datePattern.isBefore(article.getCreationDate())) {
+            } else if (compareValue.equals("after") && localDate.isBefore(article.getCreationDate())) {
                 foundArticles.add(article);
             }
         }
@@ -99,13 +96,12 @@ public class ArticleRepository {
         return ArticleData.articles.values().stream().collect(Collectors.toList());
     }
 
-    public Article getArticleById(SearchCriteria filter) {
-        String articleId = filter.getArticleId();
+    public Article getArticleById(String id) {
 
         List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
 
         for (Article article : allArticles) {
-            if (article.getId().equals(articleId)) {
+            if (article.getId().equals(id)) {
                 return article;
             }
         }
@@ -117,7 +113,7 @@ public class ArticleRepository {
         Random random = new Random();
         BufferedWriter writer = null;
         FileWriter fileWriter;
-        String file = "C:\\Work\\graphql_undertow\\src\\main\\resources\\articles.txt";
+        Path path = Paths.get("src\\main\\resources\\articles.txt");
 
         newArticle.setId(String.valueOf(random.nextInt(Integer.MAX_VALUE)));
         newArticle.setTitle(article.getTitle());
@@ -129,7 +125,7 @@ public class ArticleRepository {
         newArticle.setImage(article.getImage());
 
         try {
-            fileWriter = new FileWriter(file, true);
+            fileWriter = new FileWriter(String.valueOf(path), true);
             writer = new BufferedWriter(fileWriter);
 
             writer.write(Mapper.articleDTOToArticle(newArticle).toString());
