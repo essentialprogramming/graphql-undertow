@@ -1,4 +1,4 @@
-package com.api.resources;
+package com.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import com.model.Article;
@@ -12,7 +12,7 @@ public class Mutation implements GraphQLMutationResolver {
 
     private final ArticleRepository articleRepository;
 
-    Mutation(ArticleRepository articleRepository) {
+    public Mutation(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
 

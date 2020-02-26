@@ -1,9 +1,10 @@
-package com.api.resources;
+package com.resolvers;
 
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.model.Article;
 import com.repository.ArticleRepository;
+import graphql.schema.DataFetchingEnvironment;
 
 import java.util.List;
 
@@ -17,11 +18,14 @@ public class Query implements GraphQLQueryResolver {
         this.articleRepository = articleRepository;
     }
 
-    public List<Article> allArticlesByTitle(String filter) {
+    public List<Article> allArticlesByTitle(String filter, DataFetchingEnvironment env) {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>"+env.getFields());
+        System.out.println("::::::::::::::::"+env.getSelectionSet().get().keySet());
         return articleRepository.getAllArticlesByTitle(filter);
     }
 
-    public List<Article> allByTag(List<String> tags) {
+    public List<Article> allByTag(List<String> tags, DataFetchingEnvironment env) {
+        System.out.println("-----------------"+env.getSelectionSet().get().keySet());
 
         return articleRepository.getAllByTag(tags);
     }

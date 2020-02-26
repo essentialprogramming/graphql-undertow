@@ -2,6 +2,8 @@ package com.api.resources;
 
 import com.coxautodev.graphql.tools.SchemaParser;
 import com.repository.ArticleRepository;
+import com.resolvers.Mutation;
+import com.resolvers.Query;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import javax.enterprise.context.ApplicationScoped;
