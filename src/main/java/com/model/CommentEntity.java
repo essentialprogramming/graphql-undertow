@@ -1,18 +1,15 @@
 package com.model;
 
-public class Comment {
+public class CommentEntity {
 
     private String id;
     private String text;
     private String commentAuthor;
 
-    public Comment(String id, String text, String commentAuthor) {
+    public CommentEntity(String id, String text, String commentAuthor) {
         this.id = id;
         this.text = text;
         this.commentAuthor = commentAuthor;
-    }
-
-    public Comment() {
     }
 
     public String getId() {

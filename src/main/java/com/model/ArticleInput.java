@@ -15,15 +15,12 @@ public class ArticleInput {
     private String title;
     private List<String> tags;
     private String content;
-    private AuthorInput author;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate creationDate;
-    private LocalDate lastModified;
     private int readingTime;
     private String image;
-    private List<Comment> comment;
 
     public String getId() {
         return id;
@@ -57,14 +54,6 @@ public class ArticleInput {
         this.content = content;
     }
 
-    public AuthorInput getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(AuthorInput author) {
-        this.author = author;
-    }
-
     public LocalDate getCreationDate() {
         return creationDate;
     }
@@ -89,19 +78,4 @@ public class ArticleInput {
         this.image = image;
     }
 
-    public LocalDate getLastModified() {
-        return lastModified;
-    }
-
-    public void setLastModified(LocalDate lastModified) {
-        this.lastModified = lastModified;
-    }
-
-    public List<Comment> getComment() {
-        return comment;
-    }
-
-    public void setComment(List<Comment> comment) {
-        this.comment = comment;
-    }
 }

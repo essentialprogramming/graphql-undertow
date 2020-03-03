@@ -1,6 +1,5 @@
 package com.repository;
 
-import com.mapper.Mapper;
 import com.model.*;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -18,18 +17,18 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class ArticleRepository {
 
-    public List<Article> getAllArticlesByTitle(String filter) {
+    public List<ArticleEntity> allByTitle(String filter) {
 
         String descriptionCondition = null;
-        List<Article> foundArticles = new ArrayList<>();
+        List<ArticleEntity> foundArticles = new ArrayList<>();
 
         if (filter != null && !filter.isEmpty()) {
             descriptionCondition = "\\b" + filter + "\\b";
 
             Pattern pattern = Pattern.compile(descriptionCondition, Pattern.CASE_INSENSITIVE);
-            List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
+            List<ArticleEntity> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
 
-            for (Article article : allArticles) {
+            for (ArticleEntity article : allArticles) {
                 Matcher matcher = pattern.matcher(article.getTitle());
                 if (matcher.find()) {
                     System.out.print("Start index: " + matcher.start());
@@ -43,16 +42,16 @@ public class ArticleRepository {
     }
 
 
-    public List<Article> getAllByTag(List<String> tags) {
+    public List<ArticleEntity> allByTag(List<String> tags) {
 
         String REGEX_FIND_WORD = "(?i).*?\\b%s\\b.*?";
-        List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
-        List<Article> foundArticles = new ArrayList<>();
+        List<ArticleEntity> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
+        List<ArticleEntity> foundArticles = new ArrayList<>();
 
         for (String t : tags) {
             String regex = String.format(REGEX_FIND_WORD, Pattern.quote(t));
 
-            for (Article article : allArticles) {
+            for (ArticleEntity article : allArticles) {
                 for (String tag : article.getTags()) {
                     if (tag.matches(regex) && !foundArticles.contains(article)) {
                         foundArticles.add(article);
@@ -63,12 +62,12 @@ public class ArticleRepository {
         return foundArticles;
     }
 
-    public List<Article> getAllByAuthor(String firstName, String lastName) {
+    public List<ArticleEntity> allByAuthor(String firstName, String lastName) {
 
-        List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
-        List<Article> foundArticles = new ArrayList<>();
+        List<ArticleEntity> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
+        List<ArticleEntity> foundArticles = new ArrayList<>();
 
-        for (Article article : allArticles) {
+        for (ArticleEntity article : allArticles) {
             if (article.getAuthor().getFirstName().equals(firstName) && article.getAuthor().getLastName().equals(lastName)) {
                 foundArticles.add(article);
             }
@@ -76,31 +75,37 @@ public class ArticleRepository {
         return foundArticles;
     }
 
-    public List<Article> getAllByDate(String date, String compareValue) {
+    public List<ArticleEntity> allBetweenDates(String startDate, String endDate) {
 
-        List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
-        List<Article> foundArticles = new ArrayList<>();
+        List<ArticleEntity> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
+        List<ArticleEntity> foundArticles = new ArrayList<>();
+        LocalDate start = LocalDate.parse(startDate);
 
-        for (Article article : allArticles) {
-            LocalDate localDate = LocalDate.parse(date);
-            if (compareValue.equals("before") && localDate.isAfter(article.getCreationDate())) {
-                foundArticles.add(article);
-            } else if (compareValue.equals("after") && localDate.isBefore(article.getCreationDate())) {
-                foundArticles.add(article);
+        for (ArticleEntity article : allArticles) {
+
+            if (endDate != null) {
+                LocalDate end = LocalDate.parse(endDate);
+                if (article.getCreationDate().isAfter(start) && article.getCreationDate().isBefore(end)) {
+                    foundArticles.add(article);
+                }
+            } else {
+                if (article.getCreationDate().isAfter(start)) {
+                    foundArticles.add(article);
+                }
             }
         }
         return foundArticles;
     }
 
-    public List<Article> getAllArticles() {
+    public List<ArticleEntity> allArticles() {
         return ArticleData.articles.values().stream().collect(Collectors.toList());
     }
 
-    public Article getArticleById(String id) {
+    public ArticleEntity getById(String id) {
 
-        List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
+        List<ArticleEntity> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
 
-        for (Article article : allArticles) {
+        for (ArticleEntity article : allArticles) {
             if (article.getId().equals(id)) {
                 return article;
             }
@@ -108,8 +113,8 @@ public class ArticleRepository {
         return null;
     }
 
-    public Article saveArticle(ArticleInput article, String firstName) throws IOException {
-        ArticleInput newArticle = new ArticleInput();
+    public ArticleEntity saveArticle(ArticleInput article) throws IOException {
+        ArticleEntity newArticle = new ArticleEntity();
         Random random = new Random();
         BufferedWriter writer = null;
         FileWriter fileWriter;
@@ -119,7 +124,6 @@ public class ArticleRepository {
         newArticle.setTitle(article.getTitle());
         newArticle.setTags(article.getTags());
         newArticle.setContent(article.getContent());
-        newArticle.setAuthor(Mapper.authorToAuthorDTO(getByFirstName(firstName)));
         newArticle.setCreationDate(LocalDate.now());
         newArticle.setReadingTime(article.getReadingTime());
         newArticle.setImage(article.getImage());
@@ -128,7 +132,7 @@ public class ArticleRepository {
             fileWriter = new FileWriter(String.valueOf(path), true);
             writer = new BufferedWriter(fileWriter);
 
-            writer.write(Mapper.articleDTOToArticle(newArticle).toString());
+            writer.write(newArticle.toString());
             writer.newLine();
 
         } catch (IOException e) {
@@ -138,18 +142,7 @@ public class ArticleRepository {
                 writer.close();
             }
         }
-        return Mapper.articleDTOToArticle(newArticle);
-    }
-
-    private Author getByFirstName(String firstName) {
-        List<Article> allArticles = ArticleData.articles.values().stream().collect(Collectors.toList());
-
-        for (Article article : allArticles) {
-            if (article.getAuthor().getFirstName().equals(firstName)) {
-                return article.getAuthor();
-            }
-        }
-        return null;
+        return newArticle;
     }
 
 

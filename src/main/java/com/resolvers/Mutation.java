@@ -1,6 +1,7 @@
 package com.resolvers;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.mapper.ArticleMapper;
 import com.model.Article;
 import com.model.ArticleInput;
 import com.repository.ArticleRepository;
@@ -16,7 +17,7 @@ public class Mutation implements GraphQLMutationResolver {
         this.articleRepository = articleRepository;
     }
 
-    public Article createArticle(ArticleInput article, String firstName) throws IOException {
-        return articleRepository.saveArticle(article, firstName);
+    public Article createArticle(ArticleInput article) throws IOException {
+        return ArticleMapper.entityToGraphQL(articleRepository.saveArticle(article));
     }
 }

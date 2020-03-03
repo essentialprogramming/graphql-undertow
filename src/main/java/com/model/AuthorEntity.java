@@ -2,23 +2,20 @@ package com.model;
 
 import java.util.List;
 
-public class Author {
+public class AuthorEntity {
 
     private String id;
     private String firstName;
     private String lastName;
-    private List<Article> articles;
+    private List<ArticleEntity> articles;
     private List<String> contactLinks;
 
-    public Author(String id, String firstName, String lastName, List<Article> articles, List<String> contactLinks) {
+    public AuthorEntity(String id, String firstName, String lastName, List<ArticleEntity> articles, List<String> contactLinks) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.articles = articles;
         this.contactLinks = contactLinks;
-    }
-
-    public Author() {
     }
 
     public String getId() {
@@ -45,11 +42,11 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public List<Article> getArticles() {
+    public List<ArticleEntity> getArticles() {
         return articles;
     }
 
-    public void setArticles(List<Article> articles) {
+    public void setArticles(List<ArticleEntity> articles) {
         this.articles = articles;
     }
 
@@ -59,16 +56,5 @@ public class Author {
 
     public void setContactLinks(List<String> contactLinks) {
         this.contactLinks = contactLinks;
-    }
-
-    @Override
-    public String toString() {
-        return "Author{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", articles=" + articles +
-                ", contactLinks=" + contactLinks +
-                '}';
     }
 }

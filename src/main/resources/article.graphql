@@ -6,14 +6,14 @@ schema {
 type Query {
     allByTag(filter: [String]): [Article]
     allByAuthor(firstName: String, lastName: String): [Article]
-    allByDate(date: String, compareValue: String): [Article]
+    allBetweenDates(startDate: String, endDate: String): [Article]
     allArticles: [Article]
     articleById(id: String): Article
-    allArticlesByTitle(filter: String): [Article]
+    allByTitle(filter: String): [Article]
 }
 
 type Mutation {
-    createArticle(article: ArticleInput, author: String): Article!
+    createArticle(article: ArticleInput): Article!
 }
 
 input ArticleInput {
@@ -21,18 +21,9 @@ input ArticleInput {
     title: String
     tags: [String]
     content: String
-    author: AuthorInput
     creationDate: String
     readingTime: Int
     image: String
-}
-
-input AuthorInput {
-    id: ID!
-    firstName: String
-    lastName: String
-    articles: [String]
-    contactLinks: [String]
 }
 
 type Article {
@@ -46,14 +37,13 @@ type Article {
     readingTime: Int
     image: String
     comment: [Comment]
-
 }
 
 type Author {
     id: ID!
     firstName: String
     lastName: String
-    articles: [String]
+    articles(count: Int): [Article]
     contactLinks: [String]
 }
 
