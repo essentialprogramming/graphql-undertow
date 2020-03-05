@@ -12,7 +12,9 @@ import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
+import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -70,5 +72,11 @@ public class GraphQLController {
         return executionResult.toSpecification();
     }
 
+    @GET
+    @Path("articles")
+    public Response getArticles() {
+        URI redirectedURL = UriBuilder.fromPath("/articlesInfo.html").build();
+        return Response.seeOther(redirectedURL).build();
+    }
 
 }
