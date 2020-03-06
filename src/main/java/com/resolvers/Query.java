@@ -71,4 +71,8 @@ public class Query implements GraphQLQueryResolver {
     public Article articleById(String id) {
         return ArticleMapper.entityToGraphQL(articleRepository.getById(id));
     }
+
+    public String hello(String message){
+        return message;
+    }
 }

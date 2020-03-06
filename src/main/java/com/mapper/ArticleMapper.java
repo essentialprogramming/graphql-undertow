@@ -23,6 +23,21 @@ public class ArticleMapper {
         return article;
     }
 
+    public static Article articleEntityToGraphQL(ArticleEntity entity) {
+        Article article = new Article();
+
+        article.setId(entity.getId());
+        article.setTitle(entity.getTitle());
+        article.setTags(entity.getTags());
+        article.setContent(entity.getContent());
+        article.setCreationDate(entity.getCreationDate());
+        article.setLastModified(entity.getLastModified());
+        article.setReadingTime(entity.getReadingTime());
+        article.setImage(entity.getImage());
+
+        return article;
+    }
+
 
 }
 

@@ -23,10 +23,10 @@ import java.util.concurrent.ExecutorService;
 @RequestScoped
 @Path("/")
 public class GraphQLController {
-	@Inject
+    @Inject
     private ExecutorsProvider executorsProvider;
 
-	@Inject
+    @Inject
     private GraphQL graphQL;
 
     @POST
@@ -53,11 +53,43 @@ public class GraphQLController {
                 .exceptionally(error -> asyncResponse.resume(handleException(error)));
     }
 
+//    @GET
+//    @Path("helloMessage")
+//    public void sayHello(@Suspended AsyncResponse asyncResponse) {
+//
+//        ExecutorService executorService = executorsProvider.getExecutorService();
+//
+//        Computation.computeAsync(() -> executeHelloMessage("Hello world!"), executorService)
+//                .thenApplyAsync(asyncResponse::resume, executorService)
+//                .exceptionally(error -> asyncResponse.resume(handleException(error)));
+//    }
+
+//    @GET
+//    @Path("helloMessage")
+//    public String sayHello() throws IOException {
+//
+//        return executeHelloMessage("Hello world!");
+//    }
+//
+//    private String executeHelloMessage(String message) throws IOException {
+//        return message;
+//    }
+
+//    @GET
+//    @Path("helloMessage")
+//    public Response sayHello() {
+//
+//        String output = "Hello world!";
+//
+//        return Response.ok(output).status(200).build();
+//
+//    }
+
     private Response handleException(Throwable ex) {
         return Response.serverError().entity(ex).build();
     }
 
-    private Map<String, Object> executeGraphqlQuery(String query,String operationName, Map<String, Object> variables) throws IOException {
+    private Map<String, Object> executeGraphqlQuery(String query, String operationName, Map<String, Object> variables) throws IOException {
 
         //Context context = contextProvider.newContext();
 
@@ -65,7 +97,7 @@ public class GraphQLController {
                 .query(query)
                 .variables(variables)
                 .operationName(operationName)
-          //      .context(context)
+                //      .context(context)
                 .build();
 
         ExecutionResult executionResult = graphQL.execute(executionInput);

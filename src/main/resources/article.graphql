@@ -10,6 +10,7 @@ type Query {
     allArticles: [Article]
     articleById(id: String): Article
     allByTitle(filter: String): [Article]
+    hello(message:String): String
 }
 
 type Mutation {

@@ -18,6 +18,6 @@ public class Mutation implements GraphQLMutationResolver {
     }
 
     public Article createArticle(ArticleInput article) throws IOException {
-        return ArticleMapper.entityToGraphQL(articleRepository.saveArticle(article));
+        return ArticleMapper.articleEntityToGraphQL(articleRepository.saveArticle(article));
     }
 }
