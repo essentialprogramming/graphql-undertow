@@ -2,15 +2,15 @@ package com.server.bean.producer;
 
 
 import org.dataloader.DataLoaderRegistry;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 
-@ApplicationScoped
+
+@Component
 public class BeanProducer {
 
-    @Produces
-    @ApplicationScoped
+    @Bean
     public DataLoaderRegistry produceDataLoaderRegistry() {
         return new DataLoaderRegistry();
     }

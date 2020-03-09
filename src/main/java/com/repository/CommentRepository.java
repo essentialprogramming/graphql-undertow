@@ -2,10 +2,11 @@ package com.repository;
 
 import com.model.Article;
 import com.model.Comment;
-import javax.enterprise.context.ApplicationScoped;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
-@ApplicationScoped
+@Repository
 public class CommentRepository {
 
     public List<Comment> getComments(Article article) {

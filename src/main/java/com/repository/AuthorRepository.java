@@ -3,11 +3,11 @@ package com.repository;
 import com.mapper.AuthorMapper;
 import com.model.ArticleData;
 import com.model.Author;
+import org.springframework.stereotype.Repository;
 
-import javax.enterprise.context.ApplicationScoped;
 
 
-@ApplicationScoped
+@Repository
 public class AuthorRepository {
 
     public Author getById(String id) {

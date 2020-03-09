@@ -5,7 +5,8 @@ import com.async.support.ExecutorsProvider;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
-import javax.enterprise.context.RequestScoped;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
@@ -20,16 +21,16 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 
-@RequestScoped
 @Path("/")
 public class GraphQLController {
-    @Inject
+    @Autowired
     private ExecutorsProvider executorsProvider;
 
     @Inject
     private GraphQL graphQL;
 
     @POST
+    @Consumes({"application/xml,application/json"})
     @Produces(MediaType.APPLICATION_JSON)
     @Path("graph")
     public void graphql(Map<String, Object> body, @Suspended AsyncResponse asyncResponse) {
@@ -53,37 +54,6 @@ public class GraphQLController {
                 .exceptionally(error -> asyncResponse.resume(handleException(error)));
     }
 
-//    @GET
-//    @Path("helloMessage")
-//    public void sayHello(@Suspended AsyncResponse asyncResponse) {
-//
-//        ExecutorService executorService = executorsProvider.getExecutorService();
-//
-//        Computation.computeAsync(() -> executeHelloMessage("Hello world!"), executorService)
-//                .thenApplyAsync(asyncResponse::resume, executorService)
-//                .exceptionally(error -> asyncResponse.resume(handleException(error)));
-//    }
-
-//    @GET
-//    @Path("helloMessage")
-//    public String sayHello() throws IOException {
-//
-//        return executeHelloMessage("Hello world!");
-//    }
-//
-//    private String executeHelloMessage(String message) throws IOException {
-//        return message;
-//    }
-
-//    @GET
-//    @Path("helloMessage")
-//    public Response sayHello() {
-//
-//        String output = "Hello world!";
-//
-//        return Response.ok(output).status(200).build();
-//
-//    }
 
     private Response handleException(Throwable ex) {
         return Response.serverError().entity(ex).build();

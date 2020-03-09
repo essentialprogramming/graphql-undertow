@@ -8,6 +8,7 @@ import com.repository.AuthorRepository;
 import com.repository.CommentRepository;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ArticleResolver implements GraphQLResolver<Article> {
 
@@ -19,8 +20,10 @@ public class ArticleResolver implements GraphQLResolver<Article> {
         this.commentRepository = commentRepository;
     }
 
-    public Author author(Article article) {
-        return authorRepository.getById(article.getAuthor().getId());
+    public CompletableFuture<Author> author(Article article) {
+        return CompletableFuture.supplyAsync(() -> {
+            return authorRepository.getById(article.getAuthor().getId());
+        });
     }
 
     public List<Comment> comment(Article article) {

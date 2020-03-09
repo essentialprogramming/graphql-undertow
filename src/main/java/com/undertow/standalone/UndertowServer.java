@@ -2,7 +2,6 @@ package com.undertow.standalone;
 
 import static io.undertow.servlet.Servlets.defaultContainer;
 import static io.undertow.servlet.Servlets.deployment;
-import static io.undertow.servlet.Servlets.listener;
 import static io.undertow.servlet.Servlets.servlet;
 
 import java.util.concurrent.locks.Lock;
@@ -10,8 +9,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.ServletException;
 
+import com.config.ContextLoaderListenerInstanceFactory;
+import io.undertow.servlet.api.ListenerInfo;
 import org.glassfish.jersey.servlet.ServletContainer;
-import org.jboss.weld.environment.servlet.Listener;
 
 import com.config.ApplicationConfig;
 import com.server.Server;
@@ -34,6 +34,8 @@ import io.undertow.websockets.core.BufferedTextMessage;
 import io.undertow.websockets.core.WebSocketChannel;
 import io.undertow.websockets.core.WebSockets;
 import io.undertow.websockets.spi.WebSocketHttpExchange;
+import org.springframework.web.context.ContextLoaderListener;
+
 import static com.util.cloud.DeploymentConfiguration.getProperty;
 import static io.undertow.Handlers.websocket;
 
@@ -53,11 +55,17 @@ public final class UndertowServer {
 		this.deploymentName = deploymentName;
 	}
 
+	private static ListenerInfo createContextLoaderListener() {
+		return new ListenerInfo(ContextLoaderListener.class,
+				new ContextLoaderListenerInstanceFactory());
+
+	}
+
 	private HttpHandler bootstrap() throws ServletException {
 		final DeploymentInfo servletBuilder = deployment()
 				.setClassLoader(Server.class.getClassLoader())
 				.setContextPath("/")
-				.addListeners(listener(Listener.class))
+				.addListeners(createContextLoaderListener())
 				.setResourceManager(new ClassPathResourceManager(Server.class.getClassLoader(), "webapp/resources"))
 				.addWelcomePage("index.html")
 				.setDeploymentName(deploymentName)

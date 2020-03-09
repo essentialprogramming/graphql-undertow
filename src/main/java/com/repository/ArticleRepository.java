@@ -1,8 +1,8 @@
 package com.repository;
 
 import com.model.*;
+import org.springframework.stereotype.Repository;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Repository
 public class ArticleRepository {
 
     public List<ArticleEntity> allByTitle(String filter) {

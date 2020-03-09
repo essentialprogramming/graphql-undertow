@@ -10,11 +10,13 @@ import com.resolvers.Mutation;
 import com.resolvers.Query;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
-import javax.enterprise.context.ApplicationScoped;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 
 
-@ApplicationScoped
+@Component
 public class GraphInit {
 
     private GraphQLSchema buildSchema(ArticleRepository articleRepository) throws IOException {
@@ -31,7 +33,7 @@ public class GraphInit {
                 .makeExecutableSchema();
     }
 
-    @javax.enterprise.inject.Produces
+    @Bean
     public GraphQL graphQL(ArticleRepository articleRepository) throws IOException {
 
         GraphQLSchema graphQLSchema = buildSchema(articleRepository);
