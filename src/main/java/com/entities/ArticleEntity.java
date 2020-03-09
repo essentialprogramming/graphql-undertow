@@ -1,4 +1,4 @@
-package com.model;
+package com.entities;
 
 import com.api.resources.LocalDateDeserializer;
 import com.api.resources.LocalDateSerializer;

@@ -1,5 +1,6 @@
 package com.repository;
 
+import com.entities.ArticleEntity;
 import com.model.*;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,6 @@
 package com.mapper;
 
+import com.entities.ArticleEntity;
 import com.model.*;
 
 import java.util.stream.Collectors;

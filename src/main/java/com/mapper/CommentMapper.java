@@ -1,7 +1,7 @@
 package com.mapper;
 
 import com.model.Comment;
-import com.model.CommentEntity;
+import com.entities.CommentEntity;
 
 public class CommentMapper {
 

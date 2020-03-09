@@ -1,7 +1,7 @@
 package com.mapper;
 
 import com.model.Author;
-import com.model.AuthorEntity;
+import com.entities.AuthorEntity;
 
 
 public class AuthorMapper {

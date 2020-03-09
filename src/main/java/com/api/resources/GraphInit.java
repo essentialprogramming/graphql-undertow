@@ -19,24 +19,24 @@ import java.io.IOException;
 @Component
 public class GraphInit {
 
-    private GraphQLSchema buildSchema(ArticleRepository articleRepository) throws IOException {
+    private GraphQLSchema buildSchema(ArticleRepository articleRepository, AuthorRepository authorRepository, CommentRepository commentRepository) throws IOException {
 
         return SchemaParser.newParser()
                 .file("article.graphql")
                 .resolvers(
                         new Query(articleRepository),
                         new Mutation(articleRepository),
-                        new ArticleResolver(new AuthorRepository(), new CommentRepository()),
+                        new ArticleResolver(authorRepository, commentRepository),
                         new AuthorResolver(articleRepository)
-                        )
+                )
                 .build()
                 .makeExecutableSchema();
     }
 
     @Bean
-    public GraphQL graphQL(ArticleRepository articleRepository) throws IOException {
+    public GraphQL graphQL(ArticleRepository articleRepository, AuthorRepository authorRepository, CommentRepository commentRepository) throws IOException {
 
-        GraphQLSchema graphQLSchema = buildSchema(articleRepository);
+        GraphQLSchema graphQLSchema = buildSchema(articleRepository, authorRepository, commentRepository);
 
         return GraphQL.newGraphQL(graphQLSchema)
                 .build();

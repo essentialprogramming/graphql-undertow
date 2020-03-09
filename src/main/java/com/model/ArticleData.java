@@ -1,6 +1,10 @@
 package com.model;
 
 
+import com.entities.ArticleEntity;
+import com.entities.AuthorEntity;
+import com.entities.CommentEntity;
+
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
