@@ -167,6 +167,7 @@ class Mutation implements GraphQLMutationResolver {
 
 ### 💾 CRUD GraphQL APIs
 
+The request URL is: `http://localhost:8080/api/graph`
 
 -Get all articles that contain given tags:
 - GraphQL
