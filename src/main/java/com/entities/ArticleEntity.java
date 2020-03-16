@@ -23,9 +23,9 @@ public class ArticleEntity {
     private LocalDate lastModified;
     private int readingTime;
     private String image;
-    private List<CommentEntity> comment;
+    private List<CommentEntity> comments;
 
-    public ArticleEntity(String id, String title, List<String> tags, String content, AuthorEntity author, LocalDate creationDate, LocalDate lastModified, int readingTime, String image, List<CommentEntity> comment) {
+    public ArticleEntity(String id, String title, List<String> tags, String content, AuthorEntity author, LocalDate creationDate, LocalDate lastModified, int readingTime, String image, List<CommentEntity> comments) {
         this.id = id;
         this.title = title;
         this.tags = tags;
@@ -35,10 +35,10 @@ public class ArticleEntity {
         this.lastModified = lastModified;
         this.readingTime = readingTime;
         this.image = image;
-        this.comment = comment;
+        this.comments = comments;
     }
 
-    public ArticleEntity(String id, String title, List<String> tags, String content, LocalDate creationDate, LocalDate lastModified, int readingTime, String image, List<CommentEntity> comment) {
+    public ArticleEntity(String id, String title, List<String> tags, String content, LocalDate creationDate, LocalDate lastModified, int readingTime, String image, List<CommentEntity> comments) {
         this.id = id;
         this.title = title;
         this.tags = tags;
@@ -47,7 +47,7 @@ public class ArticleEntity {
         this.lastModified = lastModified;
         this.readingTime = readingTime;
         this.image = image;
-        this.comment = comment;
+        this.comments = comments;
     }
 
     public ArticleEntity() {
@@ -125,12 +125,12 @@ public class ArticleEntity {
         this.image = image;
     }
 
-    public List<CommentEntity> getComment() {
-        return comment;
+    public List<CommentEntity> getComments() {
+        return comments;
     }
 
-    public void setComment(List<CommentEntity> comment) {
-        this.comment = comment;
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
     }
 
     @Override
@@ -145,7 +145,7 @@ public class ArticleEntity {
                 ", lastModified=" + lastModified +
                 ", readingTime=" + readingTime +
                 ", image='" + image + '\'' +
-                ", comment=" + comment +
+                ", comment=" + comments +
                 '}';
     }
 }

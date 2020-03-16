@@ -32,9 +32,6 @@ public class ArticleRepository {
             for (ArticleEntity article : allArticles) {
                 Matcher matcher = pattern.matcher(article.getTitle());
                 if (matcher.find()) {
-                    System.out.print("Start index: " + matcher.start());
-                    System.out.print(" End index: " + matcher.end() + " ");
-                    System.out.println(matcher.group());
                     foundArticles.add(article);
                 }
             }

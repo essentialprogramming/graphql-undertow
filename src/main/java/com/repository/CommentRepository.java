@@ -10,7 +10,7 @@ import java.util.List;
 public class CommentRepository {
 
     public List<Comment> getComments(Article article) {
-        List<Comment> comments = article.getComment();
+        List<Comment> comments = article.getComments();
         return comments;
     }
 }

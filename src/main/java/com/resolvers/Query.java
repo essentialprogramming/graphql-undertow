@@ -21,8 +21,8 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public List<Article> allByTitle(String filter, DataFetchingEnvironment env) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>" + env.getFields());
-        System.out.println("::::::::::::::::" + env.getSelectionSet().get().keySet());
+        //System.out.println(">>>>>>>>>>>>>>>>>>>>" + env.getFields());
+        //System.out.println("::::::::::::::::" + env.getSelectionSet().get().keySet());
 
         return articleRepository.allByTitle(filter)
                 .stream()
@@ -31,7 +31,7 @@ public class Query implements GraphQLQueryResolver {
     }
 
     public List<Article> allByTag(List<String> tags, DataFetchingEnvironment env) {
-        System.out.println("-----------------" + env.getSelectionSet().get().keySet());
+        //System.out.println("-----------------" + env.getSelectionSet().get().keySet());
 
         return articleRepository.allByTag(tags)
                 .stream()

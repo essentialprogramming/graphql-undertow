@@ -1,5 +1,10 @@
 # GraphQL application
 
+### 🌀 Build and run
+Start the  application by running Server class in your IDE or by running :
+
+`java - jar numejar.jar`
+
 ### 💎 GraphQL Schema
 
 We have three data types: Article, Author, Comment and one input: ArticleInput. 
@@ -165,7 +170,7 @@ class Mutation implements GraphQLMutationResolver {
 }
 ```
 
-### 💾 CRUD GraphQL APIs
+### 💾  Query samples
 
 The request URL is: `http://localhost:8080/api/graph`
 

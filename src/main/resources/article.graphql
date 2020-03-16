@@ -37,7 +37,7 @@ type Article {
     lastModified: String
     readingTime: Int
     image: String
-    comment: [Comment]
+    comments: [Comment]
 }
 
 type Author {

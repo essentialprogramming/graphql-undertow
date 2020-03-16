@@ -23,9 +23,9 @@ public class Article {
     private LocalDate lastModified;
     private int readingTime;
     private String image;
-    private List<Comment> comment;
+    private List<Comment> comments;
 
-    public Article(String id, String title, List<String> tags, String content, Author author, LocalDate creationDate, LocalDate lastModified, int readingTime, String image, List<Comment> comment) {
+    public Article(String id, String title, List<String> tags, String content, Author author, LocalDate creationDate, LocalDate lastModified, int readingTime, String image, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.tags = tags;
@@ -35,7 +35,7 @@ public class Article {
         this.lastModified = lastModified;
         this.readingTime = readingTime;
         this.image = image;
-        this.comment = comment;
+        this.comments = comments;
     }
 
     public Article() {
@@ -113,12 +113,12 @@ public class Article {
         this.image = image;
     }
 
-    public List<Comment> getComment() {
-        return comment;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public void setComment(List<Comment> comment) {
-        this.comment = comment;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
@@ -133,7 +133,7 @@ public class Article {
                 ", lastModified=" + lastModified +
                 ", readingTime=" + readingTime +
                 ", image='" + image + '\'' +
-                ", comment=" + comment +
+                ", comment=" + comments +
                 '}';
     }
 }
