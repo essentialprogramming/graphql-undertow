@@ -1,4 +1,4 @@
-const Comments = ({ comment }) => {
+const Comment = ({ comments }) => {
 return (
 <ul>
 <li>
@@ -6,7 +6,7 @@ return (
  </li>
 <ul>
 
-    {comment && comment.map(({ id, text, commentAuthor }) => (
+    {comments && comments.map(({ id, text, commentAuthor }) => (
     <li key={text}>
         {commentAuthor}: {text}
     </li>
@@ -27,12 +27,12 @@ return (
 );
 };
 
-const Article = ({ title, author, comment }) => {
+const Article = ({ title, author, comments }) => {
   return (
     <li>
       <p>{`${title} by ${author.firstName}`}</p>
       <Author author={author} />
-      <Comments comment={comment} />
+      <Comment comments={comments} />
     </li>
   );
 };
@@ -71,7 +71,7 @@ class App extends React.Component {
                               lastModified
                               readingTime
                               image
-                              comment {
+                              comments {
                                   text
                                   commentAuthor
                               }
