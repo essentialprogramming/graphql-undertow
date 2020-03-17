@@ -4,13 +4,16 @@ schema {
 }
 
 type Query {
-    allByTag(filter: [String]): [Article]
+#    allByTag(filter: [String]): [Article]
     allByAuthor(firstName: String, lastName: String): [Article]
     allBetweenDates(startDate: String, endDate: String): [Article]
     allArticles: [Article]
     articleById(id: String): Article
     allByTitle(filter: String): [Article]
     hello(message:String): String
+
+    articles: [Article]
+
 }
 
 type Mutation {
@@ -30,7 +33,7 @@ input ArticleInput {
 type Article {
     id: ID!
     title: String!
-    tags: [String]
+    tags(tags: [String]): [Article]
     content: String
     author: Author
     creationDate: String

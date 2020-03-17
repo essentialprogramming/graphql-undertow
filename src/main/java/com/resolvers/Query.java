@@ -30,14 +30,14 @@ public class Query implements GraphQLQueryResolver {
                 .collect(Collectors.toList());
     }
 
-    public List<Article> allByTag(List<String> tags, DataFetchingEnvironment env) {
-        //System.out.println("-----------------" + env.getSelectionSet().get().keySet());
-
-        return articleRepository.allByTag(tags)
-                .stream()
-                .map(ArticleMapper::entityToGraphQL)
-                .collect(Collectors.toList());
-    }
+//    public List<Article> allByTag(List<String> tags, DataFetchingEnvironment env) {
+//        //System.out.println("-----------------" + env.getSelectionSet().get().keySet());
+//
+//        return articleRepository.allByTag(tags)
+//                .stream()
+//                .map(ArticleMapper::entityToGraphQL)
+//                .collect(Collectors.toList());
+//    }
 
     public List<Article> allByAuthor(String firstName, String lastName, DataFetchingEnvironment env) {
         env.getFields().forEach(selection -> {
@@ -74,5 +74,12 @@ public class Query implements GraphQLQueryResolver {
 
     public String hello(String message){
         return message;
+    }
+
+    public List<Article> articles() {
+        return articleRepository.allArticles()
+                .stream()
+                .map(ArticleMapper::entityToGraphQL)
+                .collect(Collectors.toList());
     }
 }
