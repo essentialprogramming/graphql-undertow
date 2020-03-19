@@ -3,7 +3,7 @@
 ### 🌀 Build and run
 Start the  application by running Server class in your IDE or by running :
 
-`java - jar numejar.jar`
+`java - jar uber-undertow-httpexchange-1.0-SNAPSHOT.jar`
 
 ### 💎 GraphQL Schema
 
