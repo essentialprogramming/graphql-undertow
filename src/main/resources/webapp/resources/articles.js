@@ -55,7 +55,7 @@ class App extends React.Component {
         },
         body: JSON.stringify({
           query: `query articles{
-                        allArticles{
+                        getArticles{
                               title
                               tags
                               content
@@ -82,7 +82,7 @@ class App extends React.Component {
        .then(result => result.json())
        .then(result => {
             this.setState({
-                    data: result.data.allArticles,
+                    data: result.data.getArticles,
             })
        })
   }

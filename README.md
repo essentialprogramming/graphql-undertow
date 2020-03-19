@@ -16,13 +16,9 @@ schema {
 }
 
 type Query {
-    allByTag(filter: [String]): [Article]
-    allByAuthor(firstName: String, lastName: String): [Article]
-    allBetweenDates(startDate: String, endDate: String): [Article]
-    allArticles: [Article]
-    articleById(id: String): Article
-    allByTitle(filter: String): [Article]
-    hello(message:String): String
+       hello(message:String): String
+       articleById(id: String): Article
+       getArticles(filter: Filter):[Article]
 }
 
 type Mutation {
@@ -64,6 +60,15 @@ type Comment {
     id: ID!
     text: String
     commentAuthor: String
+}
+
+input Filter {
+    tags: [String]
+    firstName: String
+    lastName: String
+    startDate: String
+    endDate: String
+    title: String
 }
 ```
 
@@ -144,11 +149,8 @@ class Query implements GraphQLQueryResolver {
         this.articleRepository = articleRepository;
     }
 
-    public List<Article> allArticles() {
-        return articleRepository.allArticles()
-                .stream()
-                .map(ArticleMapper::entityToGraphQL)
-                .collect(Collectors.toList());
+    public Article articleById(String id) {
+           return ArticleMapper.entityToGraphQL(articleRepository.getById(id));
     }
 
 }
@@ -165,7 +167,7 @@ class Mutation implements GraphQLMutationResolver {
     }
 
     public Article createArticle(ArticleInput article) throws IOException {
-        return ArticleMapper.entityToGraphQL(articleRepository.saveArticle(article));
+        return ArticleMapper.entityWithoutAuthorToGraphQL(articleRepository.saveArticle(article));
     }
 }
 ```
@@ -174,74 +176,169 @@ class Mutation implements GraphQLMutationResolver {
 
 The request URL is: `http://localhost:8080/api/graph`
 
--Get all articles that contain given tags:
+-Get all articles that correspond to specific filters: 
+
 - GraphQL
-```graphql 
-query articlesByTag($tags: [String]){
-   allByTag(filter: $tags ){
-       ...ArticleFragment
-   }
-}
-
-fragment ArticleFragment on Article {
-  title
-  tags
-  content
-}
-```
-
-- GraphQL Variables
-```graphql 
-{
-	"tags":["JVM","Architecture"]
+```graphql
+query listAll{
+    getArticles(filter: {
+       title:"java", tags: ["Architecture", "JAVA"], firstName:"Justin", lastName:"Albano",
+        startDate:"2019-01-01", endDate:"2019-03-01"
+    })
+   {
+        title
+        content
+        tags
+        author {
+            firstName
+            articles(count:2) {
+            title
+      }
+      contactLinks
+        }
+       
+    }
 }
 ```
 
 - Response
-```graphql 
+```json5
 {
     "data": {
-        "allByTag": [
+        "getArticles": [
             {
                 "title": "Causes and Avoidance of java.lang.VerifyError",
+                "content": "In this tutorial, we'll look at the cause of java.lang.VerifyError errors and multiple ways to avoid it.",
                 "tags": [
                     "Java",
                     "JVM"
                 ],
-                "content": "In this tutorial, we'll look at the cause of java.lang.VerifyError errors and multiple ways to avoid it."
-            },
-            {
-                "title": "Best Practices for REST API Error Handling",
-                "tags": [
-                    "Architecture",
-                    "REST"
-                ],
-                "content": "REST is a stateless architecture in which clients can access and manipulate resources on a server."
+                "author": {
+                    "firstName": "Justin",
+                    "articles": [
+                        {
+                            "title": "Causes and Avoidance of java.lang.VerifyError"
+                        },
+                        {
+                            "title": "A Guide to Java HashMap"
+                        }
+                    ],
+                    "contactLinks": [
+                        "GitHub",
+                        "Twitter"
+                    ]
+                }
             }
         ]
     }
 }
 ```
 
--Ger all articles from a specific author
+-Get all articles:
 
 - GraphQL
+```graphql
+query listAll{
+    getArticles {
+        title
+        content
+        tags
+        author {
+            firstName
+            articles(count:1) {
+            title
+      }
+      contactLinks
+        }
+       
+    }
+}
+```
+- Response
+```json5
+{
+    "data": {
+        "getArticles": [
+            {
+                "title": "Best Practices for REST API Error Handling",
+                "content": "REST is a stateless architecture in which clients can access and manipulate resources on a server.",
+                "tags": [
+                    "Architecture",
+                    "REST"
+                ],
+                "author": {
+                    "firstName": "Michael",
+                    "articles": [
+                        {
+                            "title": "Best Practices for REST API Error Handling"
+                        }
+                    ],
+                    "contactLinks": [
+                        "GitHub"
+                    ]
+                }
+            },
+            {
+                "title": "Causes and Avoidance of java.lang.VerifyError",
+                "content": "In this tutorial, we'll look at the cause of java.lang.VerifyError errors and multiple ways to avoid it.",
+                "tags": [
+                    "Java",
+                    "JVM"
+                ],
+                "author": {
+                    "firstName": "Justin",
+                    "articles": [
+                        {
+                            "title": "Causes and Avoidance of java.lang.VerifyError"
+                        }
+                    ],
+                    "contactLinks": [
+                        "GitHub",
+                        "Twitter"
+                    ]
+                }
+            },
+            {
+                "title": "A Guide to Java HashMap",
+                "content": "Let's first look at what it means that HashMap is a map. A map is a key-value mapping, which means that every key is mapped to exactly one value and that we can use the key to retrieve the corresponding value from a map.",
+                "tags": [
+                    "Java"
+                ],
+                "author": {
+                    "firstName": "Justin",
+                    "articles": [
+                        {
+                            "title": "Causes and Avoidance of java.lang.VerifyError"
+                        }
+                    ],
+                    "contactLinks": [
+                        "GitHub",
+                        "Twitter"
+                    ]
+                }
+            }
+        ]
+    }
+}
+```
 
-```graphql 
-query articlesByAuthor($firstName: String, $lastName: String){
-   allByAuthor(firstName: $firstName, lastName: $lastName){
+-Get article by id:
+
+- GraphQL
+```graphql
+query articlesById($id: String){
+   articleById(id: $id){
        ...ArticleFragment
    }
 }
 
 fragment ArticleFragment on Article {
-  title
-  tags
+  title 
+  tags 
   content
   author{
       firstName
-      lastName
-      articles(count: 2){
+      articles(count:2) {
           title
       }
       contactLinks
@@ -250,376 +347,55 @@ fragment ArticleFragment on Article {
   lastModified
   readingTime
   image
-  comment {
+  comments {
       text
       commentAuthor
   }
 }
 ```
-- GraphQL Variable
-```graphql 
+- GraphQL Variables
+```json5
 {
-	"firstName": "Justin",
-	"lastName": "Albano"
+	"id": "2"
 }
 ```
+
 - Response
-```graphql 
-{
-    "data": {
-        "allByAuthor": [
-            {
-                "title": "Best Practices for REST API Error Handling",
-                "tags": [
-                    "Architecture",
-                    "REST"
-                ],
-                "content": "REST is a stateless architecture in which clients can access and manipulate resources on a server.",
-                "author": {
-                    "firstName": "Justin",
-                    "lastName": "Albano",
-                    "articles": [
-                        {
-                            "title": "Best Practices for REST API Error Handling"
-                        },
-                        {
-                            "title": "Causes and Avoidance of java.lang.VerifyError"
-                        }
-                    ],
-                    "contactLinks": [
-                        "GitHub",
-                        "Twitter"
-                    ]
-                },
-                "creationDate": "2018-10-22",
-                "lastModified": "2019-01-11",
-                "readingTime": 3,
-                "image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg",
-                "comment": [
-                    {
-                        "text": "First comment",
-                        "commentAuthor": "Ion Popescu"
-                    }
-                ]
-            },
-            {
-                "title": "Causes and Avoidance of java.lang.VerifyError",
-                "tags": [
-                    "Java",
-                    "JVM"
-                ],
-                "content": "In this tutorial, we'll look at the cause of java.lang.VerifyError errors and multiple ways to avoid it.",
-                "author": {
-                    "firstName": "Justin",
-                    "lastName": "Albano",
-                    "articles": [
-                        {
-                            "title": "Best Practices for REST API Error Handling"
-                        },
-                        {
-                            "title": "Causes and Avoidance of java.lang.VerifyError"
-                        }
-                    ],
-                    "contactLinks": [
-                        "GitHub",
-                        "Twitter"
-                    ]
-                },
-                "creationDate": "2019-01-12",
-                "lastModified": "2019-11-18",
-                "readingTime": 2,
-                "image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg",
-                "comment": [
-                    {
-                        "text": "Second comment",
-                        "commentAuthor": "Gigel"
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
--Get all articles betweend two dates
-- GraphQL
-```graphql 
-query articlesByDate($startDate: String, $endDate: String){
-   allBetweenDates(startDate: $startDate, endDate: $endDate){
-       ...ArticleFragment
-   }
-}
-
-```
-- GraphQL Variables
-```graphql 
-{
-	"startDate": "2019-01-01",
-	"endDate":"2019-03-01"
-}
-```
-- Result
-```graphql 
-{
-    "data": {
-        "allBetweenDates": [
-            {
-                "title": "Causes and Avoidance of java.lang.VerifyError",
-                "tags": [
-                    "Java",
-                    "JVM"
-                ],
-                "content": "In this tutorial, we'll look at the cause of java.lang.VerifyError errors and multiple ways to avoid it.",
-                "author": {
-                    "firstName": "Justin",
-                    "lastName": "Albano",
-                    "articles": [],
-                    "contactLinks": [
-                        "GitHub",
-                        "Twitter"
-                    ]
-                },
-                "creationDate": "2019-01-12",
-                "lastModified": "2019-11-18",
-                "readingTime": 2,
-                "image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg",
-                "comment": [
-                    {
-                        "text": "Second comment",
-                        "commentAuthor": "Gigel"
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
--Get all articles
-- GraphQL
-```graphql 
-query articles{
-   allArticles{
-       ...ArticleFragment
-   }
-}
-
-```
-- Result
-```graphql 
-{
-    "data": {
-        "allArticles": [
-            {
-                "title": "Best Practices for REST API Error Handling",
-                "tags": [
-                    "Architecture",
-                    "REST"
-                ],
-                "content": "REST is a stateless architecture in which clients can access and manipulate resources on a server.",
-                "author": {
-                    "firstName": "Justin",
-                    "lastName": "Albano",
-                    "articles": [],
-                    "contactLinks": [
-                        "GitHub",
-                        "Twitter"
-                    ]
-                },
-                "creationDate": "2018-10-22",
-                "lastModified": "2019-01-11",
-                "readingTime": 3,
-                "image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg",
-                "comment": [
-                    {
-                        "text": "First comment",
-                        "commentAuthor": "Ion Popescu"
-                    }
-                ]
-            },
-            {
-                "title": "Causes and Avoidance of java.lang.VerifyError",
-                "tags": [
-                    "Java",
-                    "JVM"
-                ],
-                "content": "In this tutorial, we'll look at the cause of java.lang.VerifyError errors and multiple ways to avoid it.",
-                "author": {
-                    "firstName": "Justin",
-                    "lastName": "Albano",
-                    "articles": [],
-                    "contactLinks": [
-                        "GitHub",
-                        "Twitter"
-                    ]
-                },
-                "creationDate": "2019-01-12",
-                "lastModified": "2019-11-18",
-                "readingTime": 2,
-                "image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg",
-                "comment": [
-                    {
-                        "text": "Second comment",
-                        "commentAuthor": "Gigel"
-                    }
-                ]
-            },
-            {
-                "title": "A Guide to Java HashMap",
-                "tags": [
-                    "Java"
-                ],
-                "content": "Let's first look at what it means that HashMap is a map. A map is a key-value mapping, which means that every key is mapped to exactly one value and that we can use the key to retrieve the corresponding value from a map.",
-                "author": {
-                    "firstName": "Michael",
-                    "lastName": "Krimgen",
-                    "articles": [],
-                    "contactLinks": [
-                        "GitHub"
-                    ]
-                },
-                "creationDate": "2019-05-22",
-                "lastModified": "2019-11-18",
-                "readingTime": 4,
-                "image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg",
-                "comment": [
-                    {
-                        "text": "There are no comments yet.",
-                        "commentAuthor": "Admin"
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
--Get article by id
-- GraphQL
-```graphql 
-query articlesById($id: String){
-   articleById(id: $id){
-       ...ArticleFragment
-   }
-}
-```
-- GraphQL Variables
-```graphql 
-{
-	"id": "1"
-}
-```
-- Result
-```graphql 
+```json5
 {
     "data": {
         "articleById": {
-            "title": "Best Practices for REST API Error Handling",
+            "title": "Causes and Avoidance of java.lang.VerifyError",
             "tags": [
-                "Architecture",
-                "REST"
+                "Java",
+                "JVM"
             ],
-            "content": "REST is a stateless architecture in which clients can access and manipulate resources on a server.",
+            "content": "In this tutorial, we'll look at the cause of java.lang.VerifyError errors and multiple ways to avoid it.",
             "author": {
                 "firstName": "Justin",
-                "articles": [],
+                "articles": [
+                    {
+                        "title": "Causes and Avoidance of java.lang.VerifyError"
+                    },
+                    {
+                        "title": "A Guide to Java HashMap"
+                    }
+                ],
                 "contactLinks": [
                     "GitHub",
                     "Twitter"
                 ]
             },
-            "creationDate": "2018-10-22",
-            "lastModified": "2019-01-11",
-            "readingTime": 3,
+            "creationDate": "2019-01-12",
+            "lastModified": "2019-11-18",
+            "readingTime": 2,
             "image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg",
-            "comment": [
+            "comments": [
                 {
-                    "text": "First comment",
-                    "commentAuthor": "Ion Popescu"
+                    "text": "Second comment",
+                    "commentAuthor": "Gigel"
                 }
             ]
-        }
-    }
-}
-```
--Get articles that contain a specific word in title
-- GraphQL
-```graphql 
-query allArticlesByTitle($title: String){
-   allByTitle(filter: $title){
-       title
-       tags
-       content
-   }
-}
-```
-- GraphQL Variables
-```graphql 
-{
-	"title": " HashMap"
-}
-```
-- Result
-```graphql 
-{
-    "data": {
-        "allByTitle": [
-            {
-                "title": "A Guide to Java HashMap",
-                "tags": [
-                    "Java"
-                ],
-                "content": "Let's first look at what it means that HashMap is a map. A map is a key-value mapping, which means that every key is mapped to exactly one value and that we can use the key to retrieve the corresponding value from a map."
-            }
-        ]
-    }
-}
-```
--Create new article
-- GraphQL
-```graphql 
-mutation createArticle($article: ArticleInput,){
-   createArticle(article: $article){
-       ...ArticleFragment
-   }
-}
-
-fragment ArticleFragment on Article {
-  id
-  title
-  tags
-  content
-  creationDate
-  readingTime
-  image
-  
-}
-```
-- GraphQL Variables
-```graphql 
-{
-	"article": {
-		"title": "How to Read HTTP Headers in Spring REST Controllers",
-		"tags": ["Rest", "Spring Web"],
-		"content": "IIn this quick tutorial, we're going to look at how to access HTTP Headers in a Spring Rest Controller.",
-		"creationDate": "2020-03-03",
-		"readingTime": 6,
-		"image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg"
-	}
-}
-```
-- Result
-```graphql 
-{
-    "data": {
-        "createArticle": {
-            "id": "266000310",
-            "title": "How to Read HTTP Headers in Spring REST Controllers",
-            "tags": [
-                "Rest",
-                "Spring Web"
-            ],
-            "content": "IIn this quick tutorial, we're going to look at how to access HTTP Headers in a Spring Rest Controller.",
-            "creationDate": "2020-03-06",
-            "readingTime": 6,
-            "image": "https://res.cloudinary.com/fittco/image/upload/w_1920,f_auto/ky8jdsfofdkpolpac2yw.jpg"
         }
     }
 }

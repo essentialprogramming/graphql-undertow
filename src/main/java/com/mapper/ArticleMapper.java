@@ -24,7 +24,7 @@ public class ArticleMapper {
         return article;
     }
 
-    public static Article articleEntityToGraphQL(ArticleEntity entity) {
+    public static Article entityWithoutAuthorToGraphQL(ArticleEntity entity) {
         Article article = new Article();
 
         article.setId(entity.getId());

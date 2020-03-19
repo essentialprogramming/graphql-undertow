@@ -1,14 +1,11 @@
 package com.model;
 
-
 import com.entities.ArticleEntity;
 import com.entities.AuthorEntity;
 import com.entities.CommentEntity;
-
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import static java.util.Arrays.asList;
 
 
@@ -84,7 +81,7 @@ public class ArticleData {
                 "1",
                 "Justin",
                 "Albano",
-                asList(article1, article2),
+                asList(article3, article2),
                 asList("GitHub", "Twitter")
         );
 
@@ -92,13 +89,13 @@ public class ArticleData {
                 "2",
                 "Michael",
                 "Krimgen",
-                asList(article3),
+                asList(article1),
                 asList("GitHub")
         );
 
-        article1.setAuthor(author1);
+        article1.setAuthor(author2);
         article2.setAuthor(author1);
-        article3.setAuthor(author2);
+        article3.setAuthor(author1);
     }
 
     public static Map<String, ArticleEntity> articles = new LinkedHashMap<>();
