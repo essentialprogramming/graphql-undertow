@@ -129,12 +129,15 @@ public class ArticleResolver implements GraphQLResolver<Article> {
 
     public CompletableFuture<Author> author(Article article) {
         return CompletableFuture.supplyAsync(() -> {
-            return authorRepository.getById(article.getAuthor().getId());
+            return AuthorMapper.entityToGraphQL(authorRepository.getById(article.getAuthor().getId()));
         });
     }
 
     public List<Comment> comment(Article article) {
-        return commentRepository.getComments(article);
+        return commentRepository.getComments(article)
+                        .stream()
+                        .map(CommentMapper::entityToGraphQL)
+                        .collect(Collectors.toList());
     }
 
 
@@ -171,7 +174,7 @@ class Mutation implements GraphQLMutationResolver {
     }
 
     public Article createArticle(ArticleInput article) throws IOException {
-        return ArticleMapper.entityWithoutAuthorToGraphQL(articleRepository.saveArticle(article));
+        return ArticleMapper.entityToGraphQL(articleRepository.saveArticle(article));
     }
 }
 ```
