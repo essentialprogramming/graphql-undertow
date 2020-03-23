@@ -6,7 +6,7 @@ schema {
 type Query {
     hello(message:String): String
     articleById(id: String): Article
-    getArticles(filter: Filter):[Article]
+    articles(filter: Filter):[Article]
 
 }
 

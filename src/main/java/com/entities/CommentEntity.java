@@ -12,6 +12,9 @@ public class CommentEntity {
         this.commentAuthor = commentAuthor;
     }
 
+    public CommentEntity() {
+    }
+
     public String getId() {
         return id;
     }

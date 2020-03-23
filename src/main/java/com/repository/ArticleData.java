@@ -1,4 +1,4 @@
-package com.model;
+package com.repository;
 
 import com.entities.ArticleEntity;
 import com.entities.AuthorEntity;

@@ -13,4 +13,12 @@ public class CommentMapper {
 
         return comment;
     }
+
+    public static CommentEntity graphQLToEntity(Comment comment){
+        CommentEntity entity = new CommentEntity();
+        entity.setId(comment.getId());
+        entity.setCommentAuthor(comment.getCommentAuthor());
+        entity.setText(comment.getText());
+        return entity;
+    }
 }

@@ -1,9 +1,13 @@
 # GraphQL application
 
 ### 🌀 Build and run
-Start the  application by running Server class in your IDE or by running :
+Build the application by running clean command followed by install from the maven tool window or run the following command from terminal : `mvn clean install`.
+
+Now you can start the  application by running Server class in your IDE or by running :
 
 `java - jar uber-undertow-httpexchange-1.0-SNAPSHOT.jar`
+
+In order to start running graphQL queries use the following url: `http://localhost:8080/api/graph`
 
 ### 💎 GraphQL Schema
 
@@ -18,7 +22,7 @@ schema {
 type Query {
        hello(message:String): String
        articleById(id: String): Article
-       getArticles(filter: Filter):[Article]
+       articles(filter: Filter):[Article]
 }
 
 type Mutation {
@@ -180,24 +184,41 @@ The request URL is: `http://localhost:8080/api/graph`
 
 - GraphQL
 ```graphql
-query listAll{
-    getArticles(filter: {
-       title:"java", tags: ["Architecture", "JAVA"], firstName:"Justin", lastName:"Albano",
-        startDate:"2019-01-01", endDate:"2019-03-01"
+query listAll($title: String, $tags: [String], $firstName: String, $lastName: String, $startDate: String, $endDate:String){
+    
+    articles(filter: {
+       title: $title, tags: $tags, firstName: $firstName, lastName: $lastName,
+        startDate: $startDate, endDate: $endDate
     })
+    
    {
         title
         content
         tags
         author {
             firstName
-            articles(count:2) {
+            articles(count:1) {
             title
-      }
-      contactLinks
+            }
+            contactLinks
+        }
+        comments {
+            commentAuthor
+            text
         }
        
     }
+}
+```
+- GraphQL Variables
+```json5
+{
+	"title": "java",
+	"tags": ["Architecture", "JAVA"],
+	"firstName": "Justin",
+	"lastName": "Albano",
+	"startDate": "2019-01-01",
+	"endDate": "2019-03-01"
 }
 ```
 
@@ -205,7 +226,7 @@ query listAll{
 ```json5
 {
     "data": {
-        "getArticles": [
+        "articles": [
             {
                 "title": "Causes and Avoidance of java.lang.VerifyError",
                 "content": "In this tutorial, we'll look at the cause of java.lang.VerifyError errors and multiple ways to avoid it.",
@@ -218,16 +239,19 @@ query listAll{
                     "articles": [
                         {
                             "title": "Causes and Avoidance of java.lang.VerifyError"
-                        },
-                        {
-                            "title": "A Guide to Java HashMap"
                         }
                     ],
                     "contactLinks": [
                         "GitHub",
                         "Twitter"
                     ]
-                }
+                },
+                "comments": [
+                    {
+                        "commentAuthor": "Gigel",
+                        "text": "Second comment"
+                    }
+                ]
             }
         ]
     }
@@ -239,7 +263,7 @@ query listAll{
 - GraphQL
 ```graphql
 query listAll{
-    getArticles {
+    articles {
         title
         content
         tags
@@ -247,8 +271,12 @@ query listAll{
             firstName
             articles(count:1) {
             title
-      }
-      contactLinks
+            }
+            contactLinks
+        }
+        comments {
+            commentAuthor
+            text
         }
        
     }
@@ -258,7 +286,7 @@ query listAll{
 ```json5
 {
     "data": {
-        "getArticles": [
+        "articles": [
             {
                 "title": "Best Practices for REST API Error Handling",
                 "content": "REST is a stateless architecture in which clients can access and manipulate resources on a server.",
@@ -276,7 +304,13 @@ query listAll{
                     "contactLinks": [
                         "GitHub"
                     ]
-                }
+                },
+                "comments": [
+                    {
+                        "commentAuthor": "Ion Popescu",
+                        "text": "First comment"
+                    }
+                ]
             },
             {
                 "title": "Causes and Avoidance of java.lang.VerifyError",
@@ -296,7 +330,13 @@ query listAll{
                         "GitHub",
                         "Twitter"
                     ]
-                }
+                },
+                "comments": [
+                    {
+                        "commentAuthor": "Gigel",
+                        "text": "Second comment"
+                    }
+                ]
             },
             {
                 "title": "A Guide to Java HashMap",
@@ -315,7 +355,13 @@ query listAll{
                         "GitHub",
                         "Twitter"
                     ]
-                }
+                },
+                "comments": [
+                    {
+                        "commentAuthor": "Admin",
+                        "text": "There are no comments yet."
+                    }
+                ]
             }
         ]
     }

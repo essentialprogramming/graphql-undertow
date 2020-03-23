@@ -14,31 +14,14 @@ public class ArticleMapper {
         article.setTitle(entity.getTitle());
         article.setTags(entity.getTags());
         article.setContent(entity.getContent());
-        article.setAuthor(AuthorMapper.entityToGraphQL(entity.getAuthor()));
+        article.setAuthor(entity.getAuthor() != null ? AuthorMapper.entityToGraphQL(entity.getAuthor()) : null);
         article.setCreationDate(entity.getCreationDate());
         article.setLastModified(entity.getLastModified());
         article.setReadingTime(entity.getReadingTime());
         article.setImage(entity.getImage());
-        article.setComments(entity.getComments().stream().map(CommentMapper::entityToGraphQL).collect(Collectors.toList()));
+        article.setComments(entity.getComments() != null ? entity.getComments().stream().map(CommentMapper::entityToGraphQL).collect(Collectors.toList()) : null);
 
         return article;
     }
-
-    public static Article entityWithoutAuthorToGraphQL(ArticleEntity entity) {
-        Article article = new Article();
-
-        article.setId(entity.getId());
-        article.setTitle(entity.getTitle());
-        article.setTags(entity.getTags());
-        article.setContent(entity.getContent());
-        article.setCreationDate(entity.getCreationDate());
-        article.setLastModified(entity.getLastModified());
-        article.setReadingTime(entity.getReadingTime());
-        article.setImage(entity.getImage());
-
-        return article;
-    }
-
-
 }
 

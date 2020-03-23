@@ -27,7 +27,7 @@ public class Query implements GraphQLQueryResolver {
         return ArticleMapper.entityToGraphQL(articleRepository.getById(id));
     }
 
-    public List<Article> getArticles(Filter filter) {
+    public List<Article> articles(Filter filter) {
 
         List<Article> result;
 

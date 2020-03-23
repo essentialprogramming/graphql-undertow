@@ -1,7 +1,6 @@
 package com.repository;
 
 import com.entities.ArticleEntity;
-import com.model.ArticleData;
 import com.model.ArticleInput;
 import org.springframework.stereotype.Repository;
 
