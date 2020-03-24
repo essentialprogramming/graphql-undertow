@@ -13,7 +13,7 @@ In order to start running graphQL queries use the following url: `http://localho
 
 We have three data types: Article, Author, Comment and one input: ArticleInput. 
 
-```graphql 
+```graphql
 schema {
     query: Query
     mutation: Mutation
@@ -49,7 +49,7 @@ type Article {
     lastModified: String
     readingTime: Int
     image: String
-    comment: [Comment]
+    comments: [Comment]
 }
 
 type Author {
