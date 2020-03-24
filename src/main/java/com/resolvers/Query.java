@@ -40,12 +40,12 @@ public class Query implements GraphQLQueryResolver {
 
         else {
             result = articles.stream()
-                    .filter(article -> filter.getTitle() != null &&
+                    .filter(article -> filter.getTitle() == null || filter.getTitle() != null &&
                             article.getTitle()
                                     .toLowerCase()
                                     .contains(filter.getTitle().toLowerCase()))
 
-                    .filter(article -> filter.getTags() != null &&
+                    .filter(article -> filter.getTags() == null || filter.getTags() != null &&
                             article.getTags()
                                     .stream()
                                     .map(String::toLowerCase)
@@ -55,7 +55,7 @@ public class Query implements GraphQLQueryResolver {
                                             .collect(Collectors.toList())
                                             .contains(tag)))
 
-                    .filter(article -> filter.getFirstName() != null && filter.getLastName() != null &&
+                    .filter(article -> filter.getFirstName() == null && filter.getLastName() == null || filter.getFirstName() != null && filter.getLastName() != null &&
                             article.getAuthor()
                                     .getFirstName()
                                     .equals(filter.getFirstName()) &&
@@ -63,7 +63,7 @@ public class Query implements GraphQLQueryResolver {
                                     .getLastName()
                                     .equals(filter.getLastName()))
 
-                    .filter(article -> filter.getStartDate() != null && filter.getEndDate() == null &&
+                    .filter(article -> filter.getStartDate() == null || filter.getStartDate() != null && filter.getEndDate() == null &&
                             article.getCreationDate()
                                     .isAfter(LocalDate.parse(filter.getStartDate())) ||
 
