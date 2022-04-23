@@ -16,7 +16,7 @@
         <io.swagger.version>2.0.6</io.swagger.version>
         <com.fasterxml.jackson.version>2.10.1</com.fasterxml.jackson.version>
         <kotlin.version>1.3.10</kotlin.version>
-        <org.springframework.version>5.2.4.RELEASE</org.springframework.version>
+        <org.springframework.version>5.3.19</org.springframework.version>
     </properties>
 
     <dependencies>
